@@ -428,6 +428,20 @@ export default class Gantt {
                 this.options.header_height +
                 this.options.padding / 2;
 
+            // highlight weekend dates
+            this.dates.forEach((date, num) => {
+                if (date.getDay() == 0 || date.getDay() == 6) {
+                    createSVG('rect', {
+                        x: num * this.options.column_width,
+                        y,
+                        width,
+                        height,
+                        class: 'weekend-highlight',
+                        append_to: this.layers.grid,
+                    });
+                }
+            });
+
             createSVG('rect', {
                 x,
                 y,

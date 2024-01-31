@@ -64,13 +64,13 @@ var Gantt = (function () {
 
         format(date, format_string = 'YYYY-MM-DD HH:mm:ss.SSS', lang = 'en') {
             const dateTimeFormat = new Intl.DateTimeFormat(lang, {
-                month: 'long'
+                month: 'long',
             });
             const month_name = dateTimeFormat.format(date);
             const month_name_capitalized =
                 month_name.charAt(0).toUpperCase() + month_name.slice(1);
 
-            const values = this.get_date_values(date).map(d => padStart(d, 2, 0));
+            const values = this.get_date_values(date).map((d) => padStart(d, 2, 0));
             const format_map = {
                 YYYY: values[0],
                 MM: padStart(+values[1] + 1, 2, 0),
@@ -1363,6 +1363,20 @@ var Gantt = (function () {
                         this.tasks.length +
                     this.options.header_height +
                     this.options.padding / 2;
+
+                // highlight weekend dates
+                this.dates.forEach((date, num) => {
+                    if (date.getDay() == 0 || date.getDay() == 6) {
+                        createSVG('rect', {
+                            x: num * this.options.column_width,
+                            y,
+                            width,
+                            height,
+                            class: 'weekend-highlight',
+                            append_to: this.layers.grid,
+                        });
+                    }
+                });
 
                 createSVG('rect', {
                     x,
